@@ -1,0 +1,214 @@
+package com.example.ivan.smartas.AddFragment;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
+import com.example.ivan.smartas.OrderShowActivity;
+import com.example.ivan.smartas.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
+
+/**
+ * Created by Ivan on 01.06.2017.
+ */
+
+public class AddFragment extends Fragment implements View.OnClickListener{
+
+    private final String SUBJECT_NAME_ATTRIBUTE = "ssubject_name";
+    private final String ORDER_TYPE_ATTRIBUTE = "order_type";
+    ListView listViewAddMenu;
+    private ImageView imageView1, imageView2, imageView3, imageView4;
+    private Button addPublish;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v  = inflater.inflate(R.layout.add, container, false);
+
+        String[] subjects = {"Математика", "Тип работы", "Цена, руб", "Срок сдачи", "Описание"};
+        String[] order_type = {"", "", "", "", ""};
+
+        ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>(subjects.length);
+        Map<String, Object> map;
+        for(int i = 0; i < subjects.length; i++){
+            map = new HashMap<String, Object>();
+            map.put(SUBJECT_NAME_ATTRIBUTE, subjects[i]);
+            map.put(ORDER_TYPE_ATTRIBUTE, order_type[i]);
+            arrayList.add(map);
+        }
+
+        String[] from = {SUBJECT_NAME_ATTRIBUTE, ORDER_TYPE_ATTRIBUTE};
+        int[] to = {R.id.subject_name, R.id.order_type};
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(getContext(), arrayList, R.layout.order_item, from, to);
+
+            LinearLayout linLayout = (LinearLayout) v.findViewById(R.id.add_subject_name);
+
+            linLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "нажата математика", Toast.LENGTH_SHORT).show();
+                }
+            });
+        LinearLayout linLayout2 = (LinearLayout) v.findViewById(R.id.add_work_type);
+
+        linLayout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "нажат тип работы", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        LinearLayout linLayout3 = (LinearLayout) v.findViewById(R.id.add_work_cost);
+
+        linLayout3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "нажата цена", Toast.LENGTH_SHORT).show();
+            }
+        });
+        LinearLayout linLayout4 = (LinearLayout) v.findViewById(R.id.add_deadline);
+
+        linLayout4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "нажат срок сдачи", Toast.LENGTH_SHORT).show();
+            }
+        });
+        LinearLayout linLayout5 = (LinearLayout) v.findViewById(R.id.add_description);
+
+        linLayout5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "нажато описание", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        imageView1 = (ImageView) v.findViewById(R.id.imageView);
+        imageView1.setOnClickListener(this);
+        imageView2 = (ImageView) v.findViewById(R.id.imageView2);
+        imageView2.setOnClickListener(this);
+        imageView3 = (ImageView) v.findViewById(R.id.imageView3);
+        imageView3.setOnClickListener(this);
+        imageView4 = (ImageView) v.findViewById(R.id.imageView4);
+        imageView4.setOnClickListener(this);
+
+        addPublish = (Button) v.findViewById(R.id.add_publish_order);
+        addPublish.setOnClickListener(this);
+
+        return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intentPhotoPicker = new Intent(Intent.ACTION_PICK);
+        intentPhotoPicker.setType("image/*");
+        switch (v.getId()){
+            case R.id.imageView:
+                startActivityForResult(intentPhotoPicker, 0);
+                break;
+            case R.id.imageView2:
+                startActivityForResult(intentPhotoPicker, 0);
+                break;
+            case R.id.imageView3:
+                startActivityForResult(intentPhotoPicker, 0);
+                break;
+            case R.id.imageView4:
+                startActivityForResult(intentPhotoPicker, 0);
+                break;
+            case R.id.add_publish_order:
+                PostOrderSender sender = new PostOrderSender();
+                sender.execute("https://fast-basin-97049.herokuapp.com/person/enter");
+                break;
+        }
+    }
+
+    private class PostOrderSender extends AsyncTask<String, Void, String>{
+
+        URL url;
+        JSONObject jsonObject = null;
+        int responceCode = 0;
+        String responce;
+
+        @Override
+        protected String doInBackground(String... params) {
+            try{
+                url = new URL(params[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoInput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.connect();
+
+                try {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("email", "nick1");
+                    jsonObject.put("password", "");
+                }catch (JSONException e){
+                    ;
+                }
+
+                DataOutputStream dataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
+                dataOutputStream.writeBytes(jsonObject.toString());
+                dataOutputStream.flush();
+                dataOutputStream.close();
+
+                responceCode = urlConnection.getResponseCode();
+                if(responceCode == HttpURLConnection.HTTP_OK){
+                    Log.d("PostTAG", "OK");
+                }else {
+                    Log.d("PostTAG", "FAIL");
+                }
+
+                InputStream inputStream = urlConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    responce += line;
+                }
+
+                Log.d("TestTAG", "POST responce = " + responce);
+
+            }catch (MalformedURLException e){
+                ;
+            }catch (IOException e){
+                ;
+            }
+            return null;
+        }
+    }
+
+}

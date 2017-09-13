@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_bottom_home"
+        android:icon="@drawable/ic_item_bottom_home"
+        android:title="Home"
+        />
+    <item
+        android:id="@+id/menu_bottom_clock"
+        android:icon="@drawable/ic_item_bottom_clock"
+        android:title="Clock"
+        />
+
+    <item
+        android:id="@+id/menu_bottom_add"
+        android:icon="@drawable/ic_item_bottom_add"
+        android:title="Add"
+        />
+
+    <item
+        android:id="@+id/menu_bottom_chat"
+        android:icon="@drawable/ic_item_bottom_chat"
+        android:title="Chat"
+        />
+    <item
+        android:id="@+id/menu_bottom_profile"
+        android:icon="@drawable/ic_item_bottom_profile"
+        android:title="Profile"
+        />
+</menu>

@@ -1,0 +1,127 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    >
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            >
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F6F6F6">
+            <RelativeLayout
+                android:id="@+id/ratingBar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FEFEFE">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:id="@+id/profile_avatar"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/ic_item_bottom_profile"
+                    android:layout_height="100dp" />
+
+                <TextView
+                    android:text="User Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profileName"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal"
+                    android:background="#FEFEFE"
+                    android:layout_below="@+id/profile_avatar"
+                    android:layout_alignParentStart="true"
+                    android:textColor="#000000" />
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/profileName"
+                    android:id="@+id/ratingBar"
+                    android:numStars="5"
+                    android:rating="4"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator" />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_money_layout"
+                android:layout_below="@+id/ratingBar_container"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#FEFEFE"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_wallet"
+                    app:srcCompat="@drawable/ic_profile_wallet"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_money_have"
+                    android:textColor="#000000"
+                    android:layout_gravity="center"
+                    android:text="1500 P"
+                    android:textSize="20sp"
+                    android:paddingLeft="10dp"
+                    android:layout_weight="0.7"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_money_picture"
+                    app:srcCompat="@drawable/ic_profile_wallet"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"/>
+            </LinearLayout>
+            </RelativeLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+       <android.support.design.widget.TabLayout
+           android:id="@+id/tabLayout"
+           android:background="@color/colorBackgroundDefault"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+       </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/profile_nested_scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

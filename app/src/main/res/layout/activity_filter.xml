@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    tools:context="com.example.ivan.smartas.FilterActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/filter_containter">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_science_text"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="Область науки"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_science_btn"
+            android:drawableRight="@drawable/ic_button_go_left"
+            android:textAlignment="viewStart"
+            android:textColor="#212121"
+            android:paddingLeft="20dp"
+            android:background="#F0F0F0"
+            android:text="Все области"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_order_type"
+            android:textColor="#000000"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:text="Область науки"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_order_type_btn"
+            android:drawableRight="@drawable/ic_button_go_left"
+            android:textAlignment="viewStart"
+            android:textColor="#212121"
+            android:paddingLeft="20dp"
+            android:background="#F0F0F0"
+            android:text="Все типы"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_sort"
+            android:textColor="#000000"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            android:text="Сортировка"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch_container"
+            android:background="#F0F0F0"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/filter_sort_type"
+                android:textColor="#000000"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="12dp"
+                android:textSize="18sp"
+                android:layout_weight="0.8"
+                android:text="По возрастанию"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textOff="OFF"
+                android:textOn="ON"
+                android:id="@+id/switcher"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_order_sort_date"
+            android:drawableRight="@drawable/ic_filter_sort_check"
+            android:textAlignment="viewStart"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="#212121"
+            android:paddingLeft="20dp"
+            android:background="#F0F0F0"
+            android:text="По дате добавления"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_order_sort_cost"
+            android:textAlignment="viewStart"
+            android:textColor="#212121"
+            android:layout_marginBottom="2dp"
+            android:paddingLeft="20dp"
+            android:background="#F0F0F0"
+            android:text="По цене"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filter_order_sort_deadline"
+            android:textAlignment="viewStart"
+            android:layout_marginBottom="2dp"
+            android:textColor="#212121"
+            android:paddingLeft="20dp"
+            android:background="#F0F0F0"
+            android:text="По сроку"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="#F6F6F6"
+            android:id="@+id/filter_sort_cost_container">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/filter_sort_cost_min"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="Мин."/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/filter_sort_cost_min_value"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="Цена от"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/filter_sort_cost_max"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="Макс."/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/filter_sort_cost_max_value"
+                    android:textColor="#000000"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="Цена до."/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/take_order"
+            android:background="#39ba9b"
+            android:paddingRight="40dp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="применить" />
+
+    </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
