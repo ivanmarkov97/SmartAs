@@ -200,7 +200,7 @@ public class AddFragment extends Fragment implements View.OnClickListener{
                     responce += line;
                 }
 
-                Log.d("TestTAG", "POST responce = " + responce);
+                Log.d("TestTAG", "POST response = " + responce);
 
             }catch (MalformedURLException e){
                 ;
