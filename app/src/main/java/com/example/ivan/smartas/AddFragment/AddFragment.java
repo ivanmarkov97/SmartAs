@@ -178,7 +178,7 @@ public class AddFragment extends Fragment implements View.OnClickListener{
                     jsonObject.put("email", "nick1");
                     jsonObject.put("password", "");
                 }catch (JSONException e){
-                    ;
+                    Log.d("ErrorTAG", "JSON error");
                 }
 
                 DataOutputStream dataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
