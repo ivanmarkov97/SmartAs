@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,7 +37,15 @@ public class AuthActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.auth_enter_name);
         password = (EditText) findViewById(R.id.auth_enter_pass);
 
-        new AuthSend().execute("https://fast-basin-97049.herokuapp.com/person/enter");
+        logInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.auth_in_btn){
+                    AuthSend authSend = new AuthSend();
+                    authSend.execute("https://fast-basin-97049.herokuapp.com/person/enter");
+                }
+            }
+        });
     }
 
     private class AuthSend extends AsyncTask<String, Void, String>{
@@ -45,7 +54,7 @@ public class AuthActivity extends AppCompatActivity {
         String auth_email;
         String auth_pass;
         int responceCode;
-        String responce;
+        String responce = "";
 
         @Override
         protected void onPreExecute() {
@@ -56,6 +65,7 @@ public class AuthActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             URL url;
+            Log.d("TestTAG", "inBackground");
             try{
                 url = new URL(params[0]);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -64,6 +74,8 @@ public class AuthActivity extends AppCompatActivity {
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.connect();
+
+                Log.d("TestTAG", "connected");
 
                 try {
                     jsonObject = new JSONObject();
@@ -98,7 +110,7 @@ public class AuthActivity extends AppCompatActivity {
             }catch (IOException e){
                 ;
             }
-            return null;
+            return responce;
         }
 
         @Override
@@ -107,13 +119,14 @@ public class AuthActivity extends AppCompatActivity {
                 JSONObject jsonResp = new JSONObject(s);
                 int code = jsonResp.getInt("code");
                 if(code == 0){
+                    //Log.d("TestTAG", "переход в активити");
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }else {
                     Toast.makeText(getApplicationContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
                 }
             }catch (JSONException e){
-                ;
+                Log.d("ErrorTAG", "JSON error");
             }
         }
     }
