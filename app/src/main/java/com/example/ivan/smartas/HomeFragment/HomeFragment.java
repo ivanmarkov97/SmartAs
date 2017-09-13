@@ -1,5 +1,6 @@
 package com.example.ivan.smartas.HomeFragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -64,7 +65,7 @@ public class HomeFragment extends Fragment{
         listViewAllOrders.setAdapter(orderAdapter);
 
         getReciever = new GetReciever();
-        getReciever.execute("https://fast-basin-97049.herokuapp.com/order/new?user_id=12");
+        getReciever.execute("https://fast-basin-97049.herokuapp.com/order/new?user_id=22");
 
         return v;
     }
@@ -80,6 +81,15 @@ public class HomeFragment extends Fragment{
         private final String ORDER_DEADLINE_DATE = "deadline_date";
         private final String ORDER_COST = "order_cost";
         private Context context;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Загружаю. Подождите...");
+            progressDialog.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -99,6 +109,7 @@ public class HomeFragment extends Fragment{
                     responce = readDataFromConnection(urlConnection);
                     Log.d("TestTAG", "HTTP OK");
                 }else {
+                    responce = "";
                     Log.d("TestTAG", "" + responceCode);
                 }
 
@@ -129,7 +140,16 @@ public class HomeFragment extends Fragment{
         protected void onPostExecute(String s) {
             Log.d("TestTAG", "tag = " + s);
             JSONArray jsonArray = getJSONResponce(s);
-            ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>(jsonArray.length());
+            int jsonLen = 0;
+            ArrayList<Map<String, Object>> arrayList;
+            if(jsonArray != null) {
+                arrayList = new ArrayList<Map<String, Object>>(jsonArray.length());
+                jsonLen = jsonArray.length();
+            }
+            else {
+                arrayList = new ArrayList<Map<String, Object>>(0);
+                jsonLen = 0;
+            }
             Map<String, Object> map;
             String subject = "";
             String subType = "";
@@ -137,25 +157,26 @@ public class HomeFragment extends Fragment{
             String deadlineDate = "";
             int cost = 0;
 
-            for(int i = 0; i < jsonArray.length(); i++){
+            for(int i = 0; i < jsonLen; i++){
                 try {
-                subject = jsonArray.getJSONObject(i).getString("subject");
-                subType = types[jsonArray.getJSONObject(i).getInt("type")];
-                createdDate = jsonArray.getJSONObject(i).getString("create_date");
-                deadlineDate = jsonArray.getJSONObject(i).getString("end_date");
-                cost = jsonArray.getJSONObject(i).getInt("cost");
-                orders.add(new Order(
-                        subject,
-                        subType,
-                        createdDate,
-                        deadlineDate,
-                        cost
-                ));
+                    subject = jsonArray.getJSONObject(i).getString("subject");
+                    subType = types[jsonArray.getJSONObject(i).getInt("type")];
+                    createdDate = jsonArray.getJSONObject(i).getString("create_date");
+                    deadlineDate = jsonArray.getJSONObject(i).getString("end_date");
+                    cost = jsonArray.getJSONObject(i).getInt("cost");
+                    orders.add(new Order(
+                            subject,
+                            subType,
+                            createdDate,
+                            deadlineDate,
+                            cost
+                    ));
 
-            }catch (JSONException e){
-                    ;
+                }catch (JSONException e){
+                    orders = new ArrayList<>();
                 }
             }
+            progressDialog.hide();
             orderAdapter.setOrders(orders);
             orderAdapter.notifyDataSetChanged();
             Log.d("TestTAG", "" + orderAdapter.getItemCount());
