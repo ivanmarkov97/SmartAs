@@ -1,5 +1,7 @@
 package com.example.ivan.smartas;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +43,7 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(v.getId() == R.id.auth_in_btn){
-                    AuthSend authSend = new AuthSend();
+                    AuthSend authSend = new AuthSend(v.getContext());
                     authSend.execute("https://fast-basin-97049.herokuapp.com/person/enter");
                 }
             }
@@ -51,15 +53,25 @@ public class AuthActivity extends AppCompatActivity {
     private class AuthSend extends AsyncTask<String, Void, String>{
 
         JSONObject jsonObject = null;
-        String auth_email;
-        String auth_pass;
+        String auth_email = "";
+        String auth_pass = "";
         int responceCode;
         String responce = "";
+        Context context;
+        ProgressDialog progressDialog;
+
+        public AuthSend(Context context){
+            this.context = context;
+        }
 
         @Override
         protected void onPreExecute() {
             auth_email = email.getText().toString();
             auth_pass = password.getText().toString();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Авторизация...");
+            progressDialog.show();
         }
 
         @Override
@@ -79,10 +91,10 @@ public class AuthActivity extends AppCompatActivity {
 
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put("email", auth_email);
-                    jsonObject.put("password", auth_pass);
+                    jsonObject.put("email", auth_email = "");
+                    jsonObject.put("password", auth_pass = "");
                 }catch (JSONException e){
-                    Log.d("ErrorTAG", "JSON error");
+                    Log.d("ErrorTAG", "JSON error 1");
                 }
 
                 DataOutputStream dataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
@@ -115,18 +127,23 @@ public class AuthActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            progressDialog.hide();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+            Log.d("TestTAG", "post response = " + s);
             try{
                 JSONObject jsonResp = new JSONObject(s);
                 int code = jsonResp.getInt("code");
                 if(code == 0){
                     //Log.d("TestTAG", "переход в активити");
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
+                    //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    //finish();
                 }else {
-                    Toast.makeText(getApplicationContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
                 }
             }catch (JSONException e){
-                Log.d("ErrorTAG", "JSON error");
+                Log.d("ErrorTAG", "JSON error 2");
+                //Toast.makeText(getApplicationContext(), "Проверьте подключение к сети", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,6 +21,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.example.ivan.smartas.Dialogs.SelectCostDialog;
+import com.example.ivan.smartas.Dialogs.SelectDateDialog;
+import com.example.ivan.smartas.Dialogs.SelectDescriptionDialog;
+import com.example.ivan.smartas.Dialogs.SelectSubjectDialog;
+import com.example.ivan.smartas.Dialogs.SelectSunjectTypeDialog;
 import com.example.ivan.smartas.OrderShowActivity;
 import com.example.ivan.smartas.R;
 
@@ -47,6 +54,7 @@ public class AddFragment extends Fragment implements View.OnClickListener{
 
     private final String SUBJECT_NAME_ATTRIBUTE = "ssubject_name";
     private final String ORDER_TYPE_ATTRIBUTE = "order_type";
+    private final int ID_SELECT_DATE = 1;
     ListView listViewAddMenu;
     private ImageView imageView1, imageView2, imageView3, imageView4;
     private Button addPublish;
@@ -73,20 +81,24 @@ public class AddFragment extends Fragment implements View.OnClickListener{
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getContext(), arrayList, R.layout.order_item, from, to);
 
-            LinearLayout linLayout = (LinearLayout) v.findViewById(R.id.add_subject_name);
+        LinearLayout linLayout = (LinearLayout) v.findViewById(R.id.add_subject_name);
 
-            linLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "нажата математика", Toast.LENGTH_SHORT).show();
-                }
-            });
+        linLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                SelectSubjectDialog selectSubjectDialog = new SelectSubjectDialog();
+                selectSubjectDialog.show(fragmentManager, "select_subject");
+            }
+        });
         LinearLayout linLayout2 = (LinearLayout) v.findViewById(R.id.add_work_type);
 
         linLayout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "нажат тип работы", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                SelectSunjectTypeDialog selectSunjectTypeDialog = new SelectSunjectTypeDialog();
+                selectSunjectTypeDialog.show(fragmentManager, "select_type");
             }
         });
 
@@ -95,7 +107,9 @@ public class AddFragment extends Fragment implements View.OnClickListener{
         linLayout3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "нажата цена", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                SelectCostDialog selectCostDialog = new SelectCostDialog();
+                selectCostDialog.show(fragmentManager, "select_cost");
             }
         });
         LinearLayout linLayout4 = (LinearLayout) v.findViewById(R.id.add_deadline);
@@ -103,7 +117,9 @@ public class AddFragment extends Fragment implements View.OnClickListener{
         linLayout4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "нажат срок сдачи", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                SelectDateDialog selectDateDialog = new SelectDateDialog();
+                selectDateDialog.show(fragmentManager, "select_date");
             }
         });
         LinearLayout linLayout5 = (LinearLayout) v.findViewById(R.id.add_description);
@@ -111,7 +127,9 @@ public class AddFragment extends Fragment implements View.OnClickListener{
         linLayout5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "нажато описание", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                SelectDescriptionDialog selectDescriptionDialog = new SelectDescriptionDialog();
+                selectDescriptionDialog.show(fragmentManager, "select_descr");
             }
         });
 
