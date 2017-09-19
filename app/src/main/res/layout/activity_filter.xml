@@ -39,6 +39,7 @@
             android:textColor="#212121"
             android:paddingLeft="20dp"
             android:background="#F0F0F0"
+            android:textAllCaps="false"
             android:text="Все области"/>
 
         <TextView
@@ -59,6 +60,7 @@
             android:textColor="#212121"
             android:paddingLeft="20dp"
             android:background="#F0F0F0"
+            android:textAllCaps="false"
             android:text="Все типы"/>
 
         <TextView
@@ -85,7 +87,7 @@
                 android:layout_marginTop="12dp"
                 android:paddingLeft="20dp"
                 android:layout_marginBottom="12dp"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_weight="0.8"
                 android:text="По возрастанию"/>
 
@@ -201,7 +203,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/take_order"
+            android:id="@+id/take_filter"
             android:background="#39ba9b"
             android:paddingRight="40dp"
             android:layout_marginTop="20dp"

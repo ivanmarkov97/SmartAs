@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivan.smartas.Dialogs.SelectCostDialog;
@@ -41,6 +42,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -167,8 +169,9 @@ public class AddFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(intentPhotoPicker, 0);
                 break;
             case R.id.add_publish_order:
+                Toast.makeText(getContext(), "добавляется", Toast.LENGTH_SHORT).show();
                 PostOrderSender sender = new PostOrderSender();
-                sender.execute("https://fast-basin-97049.herokuapp.com/person/enter");
+                sender.execute("https://fast-basin-97049.herokuapp.com/order/create");
                 break;
         }
     }
@@ -179,6 +182,54 @@ public class AddFragment extends Fragment implements View.OnClickListener{
         JSONObject jsonObject = null;
         int responceCode = 0;
         String responce;
+
+        final String[] types = getContext().getResources().getStringArray(R.array.subjects_type);
+
+        int type_num = 0;
+
+        String subject = "";
+        String type = "";
+        Integer category = 0;
+        String description = "";
+        String create_date = "";
+        String end_date = "";
+        String cost = "";
+
+        private int getIndexByValue(String[] mass, String value){
+            for(int i = 0; i < mass.length; i++){
+                if(value == mass[i]){
+                    return i;
+                }
+            }
+            return mass.length - 1;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            Date date = new Date();
+
+            subject = ((TextView)getActivity().findViewById(R.id.add_subject_name_value)).getText().toString();
+            type = ((TextView)getActivity().findViewById(R.id.add_work_type_value)).getText().toString();
+            type_num = getIndexByValue(types, type);
+            category = 0;
+            description = ((TextView)getActivity().findViewById(R.id.add_description_value)).getText().toString();
+            create_date = "" + date.getDay() + "." + date.getMonth() + "." + (date.getYear() + 1900);
+            end_date = ((TextView)getActivity().findViewById(R.id.add_deadline_value)).getText().toString();
+            cost = ((TextView)getActivity().findViewById(R.id.add_work_cost_value)).getText().toString();
+
+            Log.d("TestTAG", subject);
+            Log.d("TestTAG", "" + type_num);
+            Log.d("TestTAG", description);
+            Log.d("TestTAG", create_date);
+            Log.d("TestTAG", end_date);
+            Log.d("TestTAG", "" + cost);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(getContext(), "добавлено", Toast.LENGTH_SHORT).show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -193,8 +244,14 @@ public class AddFragment extends Fragment implements View.OnClickListener{
 
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put("email", "nick1");
-                    jsonObject.put("password", "");
+                    jsonObject.put("subject", subject);
+                    jsonObject.put("type", type_num);
+                    jsonObject.put("category", 0);
+                    jsonObject.put("description", description);
+                    jsonObject.put("create_date", create_date);
+                    jsonObject.put("end_date", end_date);
+                    jsonObject.put("cost", Integer.valueOf(cost));
+                    jsonObject.put("client", 12);
                 }catch (JSONException e){
                     Log.d("ErrorTAG", "JSON error");
                 }
