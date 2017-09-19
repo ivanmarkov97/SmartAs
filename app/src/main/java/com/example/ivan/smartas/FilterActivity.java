@@ -37,13 +37,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     TextView maxCost;
     Button takeFilter;
 
-    private final String FILTER_SETTINGS = "filter_settings";
-    private final String FILTER_SCIENCE_REGION = "science_region";
-    private final String FILTER_WORK_TYPE = "work_type";
-    private final String FILTER_ORDER_ASK = "order_ask";
-    private final String FILTER_SORTED_DATE = "sorted_date";
-    private final String FILTER_SORTED_COST = "sorted_cost";
-    private final String FILTER_SORTED_LIMIT = "sorted_deadline";
     private final String FILTER_MIN_COST = "min_cost";
     private final String FILTER_MAX_COST = "max_cost";
 
@@ -80,9 +73,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         minCost.setOnClickListener(this);
         maxCost.setOnClickListener(this);
         takeFilter.setOnClickListener(this);
-
-        sharedPreferences = getSharedPreferences(FILTER_SETTINGS, Context.MODE_PRIVATE);
-        filterBySharedPreferences(sharedPreferences);
     }
 
     @Override
@@ -97,7 +87,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (v.getId()){
             case R.id.filter_science_btn:
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -111,41 +100,52 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.switcher:
                 if(orderedASK.isChecked()){
-                    editor.putString(FILTER_ORDER_ASK, "true");
+                    Filter.setIsASK(true);
+                    //editor.putString(FILTER_ORDER_ASK, "true");
                 }else {
-                    editor.putString(FILTER_ORDER_ASK, "false");
+                    Filter.setIsASK(false);
+                    //editor.putString(FILTER_ORDER_ASK, "false");
                 }
-                editor.apply();
+                //editor.apply();
                 break;
             case R.id.filter_order_sort_date:
                 Drawable imageCheck = getResources().getDrawable(R.drawable.ic_filter_sort_check);
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck, null);
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                editor.putString(FILTER_SORTED_DATE, "true");
+                /*editor.putString(FILTER_SORTED_DATE, "true");
                 editor.putString(FILTER_SORTED_COST, "false");
                 editor.putString(FILTER_SORTED_LIMIT, "false");
-                editor.apply();
+                editor.apply();*/
+                Filter.setByDate(true);
+                Filter.setByCost(false);
+                Filter.setByLimit(false);
                 break;
             case R.id.filter_order_sort_cost:
                 Drawable imageCheck1 = getResources().getDrawable(R.drawable.ic_filter_sort_check);
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck1, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                editor.putString(FILTER_SORTED_DATE, "false");
+                /*editor.putString(FILTER_SORTED_DATE, "false");
                 editor.putString(FILTER_SORTED_COST, "true");
                 editor.putString(FILTER_SORTED_LIMIT, "false");
-                editor.apply();
+                editor.apply();*/
+                Filter.setByDate(false);
+                Filter.setByCost(true);
+                Filter.setByLimit(false);
                 break;
             case R.id.filter_order_sort_deadline:
                 Drawable imageCheck2 = getResources().getDrawable(R.drawable.ic_filter_sort_check);
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck2, null);
-                editor.putString(FILTER_SORTED_DATE, "false");
+                /*editor.putString(FILTER_SORTED_DATE, "false");
                 editor.putString(FILTER_SORTED_COST, "false");
                 editor.putString(FILTER_SORTED_LIMIT, "true");
-                editor.apply();
+                editor.apply();*/
+                Filter.setByDate(false);
+                Filter.setByCost(false);
+                Filter.setByLimit(true);
                 break;
             case R.id.filter_sort_cost_min_value:
                 FragmentManager fragmentManager2 = getSupportFragmentManager();
@@ -160,57 +160,9 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 filterCostDialogMax.show(fragmentManager3, "max_cost");
                 break;
             case R.id.take_filter:
-                editor.apply();
+                //editor.apply();
                 Toast.makeText(getApplicationContext(), "Фильтр настроен", Toast.LENGTH_SHORT).show();
                 break;
-        }
-    }
-
-    public void filterBySharedPreferences(SharedPreferences sharedPreferences){
-        if(sharedPreferences != null){
-            String region = "all";
-            String type = "all";
-            String isASK = "false";
-            String byDate = "true";
-            String byCost = "false";
-            String byLimit = "false";
-            String minCostSP = "";
-            String maxCostSP = "";
-
-            region = sharedPreferences.getString(FILTER_SCIENCE_REGION, "All");
-            type = sharedPreferences.getString(FILTER_WORK_TYPE, "Все типы");
-            isASK = sharedPreferences.getString(FILTER_ORDER_ASK, "false");
-            byDate = sharedPreferences.getString(FILTER_SORTED_DATE, "true");
-            byCost = sharedPreferences.getString(FILTER_SORTED_COST, "false");
-            byLimit = sharedPreferences.getString(FILTER_SORTED_LIMIT, "false");
-            minCostSP = sharedPreferences.getString(FILTER_MIN_COST, "Цена от");
-            maxCostSP = sharedPreferences.getString(FILTER_MAX_COST, "Цена до");
-
-            scienceButton.setText(region);
-            scienceType.setText(type);
-            minCost.setText(minCostSP);
-            maxCost.setText(maxCostSP);
-            if(isASK.equals("false")){
-                orderedASK.setChecked(false);
-            } else {
-                orderedASK.setChecked(true);
-            }
-            Drawable imageCheckSP = getResources().getDrawable(R.drawable.ic_filter_sort_check);
-            if(byDate.equals("true")){
-                sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheckSP, null);
-                sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            }
-            if(byCost.equals("true")){
-                sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheckSP, null);
-                sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            }
-            if(byLimit.equals("true")){
-                sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheckSP, null);
-            }
         }
     }
 }

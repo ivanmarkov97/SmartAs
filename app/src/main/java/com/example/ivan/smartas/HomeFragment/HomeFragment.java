@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.example.ivan.smartas.Filter;
 import com.example.ivan.smartas.OrderShowActivity;
 import com.example.ivan.smartas.R;
 
@@ -56,26 +57,6 @@ public class HomeFragment extends Fragment{
     private OrderAdapter orderAdapter;
     private ArrayList<Order> orders = new ArrayList<>();
 
-    private final String FILTER_SETTINGS = "filter_settings";
-    private final String FILTER_SCIENCE_REGION = "science_region";
-    private final String FILTER_WORK_TYPE = "work_type";
-    private final String FILTER_ORDER_ASK = "order_ask";
-    private final String FILTER_SORTED_DATE = "sorted_date";
-    private final String FILTER_SORTED_COST = "sorted_cost";
-    private final String FILTER_SORTED_LIMIT = "sorted_deadline";
-    private final String FILTER_MIN_COST = "min_cost";
-    private final String FILTER_MAX_COST = "max_cost";
-
-    SharedPreferences sharedPreferences;
-    String region = "";
-    String type = "";
-    String isASK = "false";
-    String byDate = "true";
-    String byCost = "false";
-    String byLimit = "false";
-    String minCostSP = "";
-    String maxCostSP = "";
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,8 +69,6 @@ public class HomeFragment extends Fragment{
         orderAdapter = new OrderAdapter(getContext());
         listViewAllOrders.setAdapter(orderAdapter);
 
-        sharedPreferences = getContext().getSharedPreferences(FILTER_SETTINGS, Context.MODE_PRIVATE);
-        clearSP(sharedPreferences);
         getReciever = new GetReciever();
         getReciever.execute("https://fast-basin-97049.herokuapp.com/order/new?user_id=22");
 
@@ -99,19 +78,11 @@ public class HomeFragment extends Fragment{
     public class GetReciever extends AsyncTask<String, Void, String> {
 
         private String responce = "";
-        private JSONObject jsonObject = null;
         private String[] types = {"Все типы", "Домашняя работа", "Контрольная работа", "Курсовой проект"};
-        private final String SUBJECT_NAME_ATTRIBUTE = "ssubject_name";
-        private final String ORDER_TYPE_ATTRIBUTE = "order_type";
-        private final String ORDER_CREATE_DATE = "created_date";
-        private final String ORDER_DEADLINE_DATE = "deadline_date";
-        private final String ORDER_COST = "order_cost";
-        private Context context;
         ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            filterBySharedPreferences(sharedPreferences);
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setMessage("Загружаю. Подождите...");
@@ -129,7 +100,6 @@ public class HomeFragment extends Fragment{
                 urlConnection.setDoInput(true);
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-
                 responceCode = urlConnection.getResponseCode();
 
                 if(responceCode == HttpURLConnection.HTTP_OK){
@@ -140,11 +110,8 @@ public class HomeFragment extends Fragment{
                     Log.d("TestTAG", "" + responceCode);
                 }
 
-            }catch (MalformedURLException e){
-                ;
-            }catch (IOException e){
-                ;
-            }
+            }catch (MalformedURLException e){;}
+            catch (IOException e){;}
             return responce;
         }
 
@@ -168,14 +135,8 @@ public class HomeFragment extends Fragment{
             Log.d("TestTAG", "tag = " + s);
             JSONArray jsonArray = getJSONResponce(s);
             int jsonLen = 0;
-            ArrayList<Map<String, Object>> arrayList;
-            if(jsonArray != null) {
-                jsonLen = jsonArray.length();
-            }
-            else {
-                jsonLen = 0;
-            }
-            Map<String, Object> map;
+            if(jsonArray != null) {jsonLen = jsonArray.length();}
+            else {jsonLen = 0;}
             String subject = "";
             String subType = "";
             String createdDate = "";
@@ -202,16 +163,10 @@ public class HomeFragment extends Fragment{
                 }
             }
             progressDialog.hide();
-
-            //sortByFilter(orders);
-
+            filterOrders(orders);
             orderAdapter.setOrders(orders);
             orderAdapter.notifyDataSetChanged();
             Log.d("TestTAG", "" + orderAdapter.getItemCount());
-        }
-
-        public String getResponce(){
-            return responce;
         }
 
         private JSONArray getJSONResponce(String responce){
@@ -219,79 +174,30 @@ public class HomeFragment extends Fragment{
             try {
                 JSONObject jsonObject = new JSONObject(responce);
                 jsonResponce = jsonObject.getJSONArray("response");
-            }catch (JSONException e){
-                ;
-            }
+            }catch (JSONException e){;}
             return jsonResponce;
         }
     }
 
-    public void filterBySharedPreferences(SharedPreferences sharedPreferences){
-        if(sharedPreferences != null){
-            region = sharedPreferences.getString(FILTER_SCIENCE_REGION, "All");
-            type = sharedPreferences.getString(FILTER_WORK_TYPE, "Все типы");
-            isASK = sharedPreferences.getString(FILTER_ORDER_ASK, "false");
-            byDate = sharedPreferences.getString(FILTER_SORTED_DATE, "true");
-            byCost = sharedPreferences.getString(FILTER_SORTED_COST, "false");
-            byLimit = sharedPreferences.getString(FILTER_SORTED_LIMIT, "false");
-            minCostSP = sharedPreferences.getString(FILTER_MIN_COST, "Цена от");
-            maxCostSP = sharedPreferences.getString(FILTER_MAX_COST, "Цена до");
-        }
-    }
-
-    public void clearSP(SharedPreferences sharedPreferences){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-    }
-
-    public void sortByFilter(ArrayList<Order> orders){
-        /*if(!region.equals("All")) {
+    public void filterOrders(ArrayList<Order> orders){
+        ArrayList<String> toDelete = new ArrayList<>();
+        if(Filter.getSubject().equals("All")){;}
+        else{
             for(int i = 0; i < orders.size(); i++){
-                if(!orders.get(i).getSubject().equals(region)){
-                    orders.remove(i);
+                if(orders.get(i).getSubject().equals(Filter.getSubject())){
+                    ;
+                }else {
+                    toDelete.add(orders.get(i).getSubject());
+                }
+            }
+            for(int i = 0; i < toDelete.size(); i++){
+                for(int j = 0; j < orders.size(); j++){
+                    if(toDelete.get(i).equals(orders.get(j).getSubject())){
+                        Log.d("TestTAG", "gonna del " + orders.get(j));
+                        orders.remove(j);
+                    }
                 }
             }
         }
-        if(!type.equals("Все типы")){
-            for(int i = 0; i < orders.size(); i++){
-                if(!orders.get(i).getType().equals(type)){
-                    orders.remove(i);
-                }
-            }
-        }
-        if(isASK.equals("true")){
-            if(byDate.equals("true")) {
-                Collections.sort(orders, new Comparator<Order>() {
-                    @Override
-                    public int compare(Order o1, Order o2) {
-                        return o1.getCreate_date().compareTo(o2.getCreate_date());
-                    }
-                });
-            }
-            if(byCost.equals("true")){
-                Collections.sort(orders, new Comparator<Order>() {
-                    @Override
-                    public int compare(Order o1, Order o2) {
-                        return o1.getCost().compareTo(o2.getCost());
-                    }
-                });
-            }
-            if(byLimit.equals("true")){
-                Collections.sort(orders, new Comparator<Order>() {
-                    @Override
-                    public int compare(Order o1, Order o2) {
-                        return o1.getEnd_date().compareTo(o2.getEnd_date());
-                    }
-                });
-            }
-        }
-        for(int i = 0; i < orders.size(); i++){
-            if(orders.get(i).getCost() < Integer.valueOf(maxCostSP) && orders.get(i).getCost() > Integer.valueOf(maxCostSP))
-                continue;
-            else{
-                orders.remove(i);
-            }
-        }*/
     }
-
 }

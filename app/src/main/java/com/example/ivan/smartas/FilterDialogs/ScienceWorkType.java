@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
+import com.example.ivan.smartas.Filter;
 import com.example.ivan.smartas.R;
 
 /**
@@ -17,9 +18,6 @@ import com.example.ivan.smartas.R;
  */
 
 public class ScienceWorkType extends DialogFragment {
-    private final String FILTER_SETTINGS = "filter_settings";
-    private final String FILTER_WORK_TYPE = "work_type";
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -30,10 +28,7 @@ public class ScienceWorkType extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 String type = filter_types[which];
                 ((Button)getActivity().findViewById(R.id.filter_order_type_btn)).setText(type);
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences(FILTER_SETTINGS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(FILTER_WORK_TYPE, type);
-                editor.apply();
+                Filter.setType(type);
                 dialog.dismiss();
             }
         });
