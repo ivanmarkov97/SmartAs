@@ -73,6 +73,28 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         minCost.setOnClickListener(this);
         maxCost.setOnClickListener(this);
         takeFilter.setOnClickListener(this);
+
+        scienceButton.setText(Filter.getSubject());
+        scienceType.setText(Filter.getType());
+        orderedASK.setChecked(Filter.isASK());
+        minCost.setText("" + Filter.getMinCost());
+        maxCost.setText("" + Filter.getMaxCost());
+        Drawable imageCheck = getResources().getDrawable(R.drawable.ic_filter_sort_check);
+        if(Filter.isByDate()){
+            sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck, null);
+            sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+        if(Filter.isByCost()){
+            sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck, null);
+            sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+        if(Filter.isByLimit()){
+            sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck, null);
+        }
     }
 
     @Override
@@ -101,22 +123,15 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.switcher:
                 if(orderedASK.isChecked()){
                     Filter.setIsASK(true);
-                    //editor.putString(FILTER_ORDER_ASK, "true");
                 }else {
                     Filter.setIsASK(false);
-                    //editor.putString(FILTER_ORDER_ASK, "false");
                 }
-                //editor.apply();
                 break;
             case R.id.filter_order_sort_date:
                 Drawable imageCheck = getResources().getDrawable(R.drawable.ic_filter_sort_check);
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck, null);
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                /*editor.putString(FILTER_SORTED_DATE, "true");
-                editor.putString(FILTER_SORTED_COST, "false");
-                editor.putString(FILTER_SORTED_LIMIT, "false");
-                editor.apply();*/
                 Filter.setByDate(true);
                 Filter.setByCost(false);
                 Filter.setByLimit(false);
@@ -126,10 +141,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck1, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                /*editor.putString(FILTER_SORTED_DATE, "false");
-                editor.putString(FILTER_SORTED_COST, "true");
-                editor.putString(FILTER_SORTED_LIMIT, "false");
-                editor.apply();*/
                 Filter.setByDate(false);
                 Filter.setByCost(true);
                 Filter.setByLimit(false);
@@ -139,10 +150,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 sortByCost.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByDate.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 sortByLimit.setCompoundDrawablesWithIntrinsicBounds(null, null, imageCheck2, null);
-                /*editor.putString(FILTER_SORTED_DATE, "false");
-                editor.putString(FILTER_SORTED_COST, "false");
-                editor.putString(FILTER_SORTED_LIMIT, "true");
-                editor.apply();*/
                 Filter.setByDate(false);
                 Filter.setByCost(false);
                 Filter.setByLimit(true);

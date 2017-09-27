@@ -5,8 +5,8 @@ package com.example.ivan.smartas;
  */
 
 public class Filter {
-    static private String subject = "";
-    static private String type = "";
+    static private String subject = "All";
+    static private String type = "Все типы";
     static private boolean isASK = false;
     static private boolean byDate = true;
     static private boolean byCost = false;

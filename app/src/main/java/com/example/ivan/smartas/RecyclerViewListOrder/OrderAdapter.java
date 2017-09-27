@@ -81,7 +81,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "cliked " + pos, Toast.LENGTH_LONG).show();
-                    v.getContext().startActivity(new Intent(v.getContext(), OrderShowActivity.class));
+                    Intent intent = new Intent(v.getContext(), OrderShowActivity.class);
+                    intent.putExtra("task_id", orders.get(pos).getId());
+                    intent.putExtra("task_name", orders.get(pos).getSubject());
+                    intent.putExtra("task_type", orders.get(pos).getType());
+                    intent.putExtra("task_description", orders.get(pos).getDescription());
+                    intent.putExtra("task_cost", orders.get(pos).getCost());
+                    intent.putExtra("task_date", orders.get(pos).getCreate_date());
+                    intent.putExtra("task_limit", orders.get(pos).getEnd_date());
+                    v.getContext().startActivity(intent);
                 }
             });
         }

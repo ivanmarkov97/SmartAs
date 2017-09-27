@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.example.ivan.smartas.DateDigitsFromString;
 import com.example.ivan.smartas.Filter;
 import com.example.ivan.smartas.OrderShowActivity;
 import com.example.ivan.smartas.R;
@@ -33,7 +34,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -137,25 +140,31 @@ public class HomeFragment extends Fragment{
             int jsonLen = 0;
             if(jsonArray != null) {jsonLen = jsonArray.length();}
             else {jsonLen = 0;}
+            int id = 0;
             String subject = "";
             String subType = "";
             String createdDate = "";
             String deadlineDate = "";
+            String description = "";
             int cost = 0;
 
             for(int i = 0; i < jsonLen; i++){
                 try {
+                    id = jsonArray.getJSONObject(i).getInt("id");
                     subject = jsonArray.getJSONObject(i).getString("subject");
                     subType = types[jsonArray.getJSONObject(i).getInt("type")];
                     createdDate = jsonArray.getJSONObject(i).getString("create_date");
                     deadlineDate = jsonArray.getJSONObject(i).getString("end_date");
                     cost = jsonArray.getJSONObject(i).getInt("cost");
+                    description = jsonArray.getJSONObject(i).getString("description");
                     orders.add(new Order(
+                            id,
                             subject,
                             subType,
                             createdDate,
                             deadlineDate,
-                            cost
+                            cost,
+                            description
                     ));
 
                 }catch (JSONException e){
@@ -193,9 +202,122 @@ public class HomeFragment extends Fragment{
             for(int i = 0; i < toDelete.size(); i++){
                 for(int j = 0; j < orders.size(); j++){
                     if(toDelete.get(i).equals(orders.get(j).getSubject())){
+                        Log.d("TestTAG", "gonna del " + orders.get(j).getSubject());
+                        orders.remove(j);
+                    }
+                }
+            }
+        }
+
+        if(Filter.getType().equals("Все типы")){;}
+        else{
+            for(int i = 0; i < orders.size(); i++){
+                if(orders.get(i).getType().equals(Filter.getType())){
+                    ;
+                }else {
+                    toDelete.add(orders.get(i).getType());
+                }
+            }
+            for(int i = 0; i < toDelete.size(); i++){
+                for(int j = 0; j < orders.size(); j++){
+                    if(toDelete.get(i).equals(orders.get(j).getType())){
                         Log.d("TestTAG", "gonna del " + orders.get(j));
                         orders.remove(j);
                     }
+                }
+            }
+        }
+
+        if(Filter.isASK()) {
+            if (Filter.isByDate()) {
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        Calendar c1 = Calendar.getInstance();
+                        Calendar c2 = Calendar.getInstance();
+                        DateDigitsFromString dateDigitsFromString1 = new DateDigitsFromString(o1.getCreate_date());
+                        DateDigitsFromString dateDigitsFromString2 = new DateDigitsFromString(o2.getCreate_date());
+                        c1.set(
+                                dateDigitsFromString1.getYear_x(),
+                                dateDigitsFromString1.getMonth_x(),
+                                dateDigitsFromString1.getDay_x()
+                        );
+                        c2.set(
+                                dateDigitsFromString2.getYear_x(),
+                                dateDigitsFromString2.getMonth_x(),
+                                dateDigitsFromString2.getDay_x()
+                        );
+                        return c1.compareTo(c2);
+                    }
+                });
+            }
+
+            if (Filter.isByCost()) {
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return o1.getCost().compareTo(o2.getCost());
+                    }
+                });
+            }
+
+            if (Filter.isByLimit()) {
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return o1.getEnd_date().compareTo(o2.getEnd_date());
+                    }
+                });
+            }
+        }else {
+            if (Filter.isByDate()){
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        Calendar c1 = Calendar.getInstance();
+                        Calendar c2 = Calendar.getInstance();
+                        DateDigitsFromString dateDigitsFromString1 = new DateDigitsFromString(o1.getCreate_date());
+                        DateDigitsFromString dateDigitsFromString2 = new DateDigitsFromString(o2.getCreate_date());
+                        c1.set(
+                                dateDigitsFromString1.getYear_x(),
+                                dateDigitsFromString1.getMonth_x(),
+                                dateDigitsFromString1.getDay_x()
+                        );
+                        c2.set(
+                                dateDigitsFromString2.getYear_x(),
+                                dateDigitsFromString2.getMonth_x(),
+                                dateDigitsFromString2.getDay_x()
+                        );
+                        return c2.compareTo(c1);
+                    }
+                });
+            }
+
+            if (Filter.isByCost()) {
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return o2.getCost().compareTo(o1.getCost());
+                    }
+                });
+            }
+
+            if (Filter.isByLimit()) {
+                Collections.sort(orders, new Comparator<Order>() {
+                    @Override
+                    public int compare(Order o1, Order o2) {
+                        return o2.getEnd_date().compareTo(o1.getEnd_date());
+                    }
+                });
+            }
+        }
+
+        if((Filter.getMaxCost() != 0) && (Filter.getMinCost() != 0)) {
+            for (int i = 0; i < orders.size(); i++) {
+                if ((orders.get(i).getCost() > Filter.getMaxCost()) || (orders.get(i).getCost() < Filter.getMinCost())) {
+                    orders.remove(i);
+                } else {
+                    ;
                 }
             }
         }

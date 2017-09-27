@@ -20,42 +20,39 @@
         android:id="@+id/add_add_photos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="70dp"
             app:srcCompat="@android:drawable/ic_menu_camera"
             android:id="@+id/imageView"
             android:background="#FEFEFE"
-            android:layout_margin="10dp"
-            android:layout_weight="0.2"/>
+            android:layout_margin="10dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             app:srcCompat="@android:drawable/ic_menu_camera"
             android:id="@+id/imageView2"
             android:background="#FEFEFE"
             android:layout_margin="10dp"
-            android:layout_weight="0.2"
             android:layout_height="70dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             app:srcCompat="@android:drawable/ic_menu_camera"
             android:id="@+id/imageView3"
             android:background="#FEFEFE"
             android:layout_margin="10dp"
-            android:layout_weight="0.2"
             android:layout_height="70dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:background="#FEFEFE"
             android:layout_margin="10dp"
             app:srcCompat="@android:drawable/ic_menu_camera"
             android:id="@+id/imageView4"
-            android:layout_weight="0.2"
             android:layout_height="70dp" />
 
     </LinearLayout>

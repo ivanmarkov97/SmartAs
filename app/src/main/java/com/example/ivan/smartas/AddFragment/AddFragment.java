@@ -1,5 +1,6 @@
 package com.example.ivan.smartas.AddFragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -160,13 +161,13 @@ public class AddFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(intentPhotoPicker, 0);
                 break;
             case R.id.imageView2:
-                startActivityForResult(intentPhotoPicker, 0);
+                startActivityForResult(intentPhotoPicker, 1);
                 break;
             case R.id.imageView3:
-                startActivityForResult(intentPhotoPicker, 0);
+                startActivityForResult(intentPhotoPicker, 2);
                 break;
             case R.id.imageView4:
-                startActivityForResult(intentPhotoPicker, 0);
+                startActivityForResult(intentPhotoPicker, 3);
                 break;
             case R.id.add_publish_order:
                 Toast.makeText(getContext(), "добавляется", Toast.LENGTH_SHORT).show();
@@ -286,4 +287,24 @@ public class AddFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            Uri selectedImage = data.getData();
+            switch (requestCode){
+                case 0:
+                    imageView1.setImageURI(selectedImage);
+                    break;
+                case 1:
+                    imageView2.setImageURI(selectedImage);
+                    break;
+                case 2:
+                    imageView3.setImageURI(selectedImage);
+                    break;
+                case 3:
+                    imageView4.setImageURI(selectedImage);
+                    break;
+            }
+        }
+    }
 }

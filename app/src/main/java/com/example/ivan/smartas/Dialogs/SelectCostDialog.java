@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class SelectCostDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Введите цену");
         final EditText editText = new EditText(getContext());
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(editText);
         builder.setPositiveButton("Применить", new DialogInterface.OnClickListener() {
             @Override

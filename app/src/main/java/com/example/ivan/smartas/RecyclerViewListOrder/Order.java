@@ -6,7 +6,7 @@ package com.example.ivan.smartas.RecyclerViewListOrder;
 
 public class Order {
 
-    private Integer id;
+    private int id;
     private String subject;
     private String type;
     private Integer category;
@@ -24,12 +24,14 @@ public class Order {
     public Order() {
     }
 
-    public Order(String subject, String type, String create_date, String end_date, Integer cost){
+    public Order(int id, String subject, String type, String create_date, String end_date, Integer cost, String description){
+        this.id = id;
         this.subject = subject;
         this.type = type;
         this.create_date = create_date;
         this.end_date = end_date;
         this.cost = cost;
+        this.description = description;
     }
 
     public Order(Integer id, String subject, String type, Integer category, String create_date, String end_date, Integer cost, String description, Integer client, Integer executor, Integer status, String review, Boolean like, String date) {

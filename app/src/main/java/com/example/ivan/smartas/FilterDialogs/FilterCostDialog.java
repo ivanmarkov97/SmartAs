@@ -41,6 +41,11 @@ public class FilterCostDialog extends DialogFragment {
         final EditText editText = new EditText(getContext());
         editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         builder.setView(editText);
+        if(filter_type == FILTER_MIN_COST){
+            builder.setTitle("Минимальная цена");
+        }else if(filter_type == FILTER_MAX_COST){
+            builder.setTitle("Максимальная цена");
+        }else {;}
         builder.setPositiveButton("Применить", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
