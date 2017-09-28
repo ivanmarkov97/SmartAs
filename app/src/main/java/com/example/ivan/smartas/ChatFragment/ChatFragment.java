@@ -64,38 +64,6 @@ public class ChatFragment extends Fragment {
             });
             linearLayoutAllMes.addView(item);
         }
-
-        /*chatMessages = new ArrayList<>();
-
-        listView = (ListView) v.findViewById(R.id.list_msg);
-        btnSend = v.findViewById(R.id.btn_chat_send);
-        editText = (EditText) v.findViewById(R.id.msg_type);
-
-        //set ListView adapter first
-        adapter = new MessageAdapter(this, R.layout.item_chat_left, chatMessages);
-        listView.setAdapter(adapter);
-
-        //event for button SEND
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editText.getText().toString().trim().equals("")) {
-                    Toast.makeText(getContext(), "Please input some text...", Toast.LENGTH_SHORT).show();
-                } else {
-                    //add message to list
-                    ChatMessage chatMessage = new ChatMessage(editText.getText().toString(), isMine);
-                    chatMessages.add(chatMessage);
-                    adapter.notifyDataSetChanged();
-                    editText.setText("");
-                    if (isMine) {
-                        isMine = false;
-                    } else {
-                        isMine = true;
-                    }
-                }
-            }
-        });*/
-
         return v;
     }
 }

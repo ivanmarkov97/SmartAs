@@ -30,6 +30,7 @@ import com.example.ivan.smartas.Dialogs.SelectSubjectDialog;
 import com.example.ivan.smartas.Dialogs.SelectSunjectTypeDialog;
 import com.example.ivan.smartas.OrderShowActivity;
 import com.example.ivan.smartas.R;
+import com.example.ivan.smartas.UserDataClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -252,7 +253,7 @@ public class AddFragment extends Fragment implements View.OnClickListener{
                     jsonObject.put("create_date", create_date);
                     jsonObject.put("end_date", end_date);
                     jsonObject.put("cost", Integer.valueOf(cost));
-                    jsonObject.put("client", 12);
+                    jsonObject.put("client", UserDataClass.getUserIdInt());
                 }catch (JSONException e){
                     Log.d("ErrorTAG", "JSON error");
                 }

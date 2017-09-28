@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
 
-    private final String SUBJECT_NAME_ATTRIBUTE = "ssubject_name";
-    private final String ORDER_TYPE_ATTRIBUTE = "order_type";
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

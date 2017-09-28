@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.ivan.smartas.RecyclerViewListOrder.Order;
 import com.example.ivan.smartas.RecyclerViewListOrder.OrderAdapter;
+import com.example.ivan.smartas.UserDataClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +74,7 @@ public class HomeFragment extends Fragment{
         listViewAllOrders.setAdapter(orderAdapter);
 
         getReciever = new GetReciever();
-        getReciever.execute("https://fast-basin-97049.herokuapp.com/order/new?user_id=22");
+        getReciever.execute("https://fast-basin-97049.herokuapp.com/order/new?user_id=" + UserDataClass.getUserIdStr());
 
         return v;
     }

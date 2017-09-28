@@ -91,8 +91,8 @@ public class AuthActivity extends AppCompatActivity {
 
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put("email", auth_email = "");
-                    jsonObject.put("password", auth_pass = "");
+                    jsonObject.put("email", auth_email);
+                    jsonObject.put("password", auth_pass);
                 }catch (JSONException e){
                     Log.d("ErrorTAG", "JSON error 1");
                 }
@@ -128,22 +128,23 @@ public class AuthActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             progressDialog.hide();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
             Log.d("TestTAG", "post response = " + s);
             try{
                 JSONObject jsonResp = new JSONObject(s);
                 int code = jsonResp.getInt("code");
+                int userId = jsonResp.getInt("id");
                 if(code == 0){
-                    //Log.d("TestTAG", "переход в активити");
-                    //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    //finish();
+                    UserDataClass.setUserIdInt(userId);
+                    UserDataClass.setUserIdStr(String.valueOf(userId));
+                    Toast.makeText(getApplicationContext(), "Ваш id == " + userId, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
                 }else {
-                    //Toast.makeText(getApplicationContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
                 }
             }catch (JSONException e){
                 Log.d("ErrorTAG", "JSON error 2");
-                //Toast.makeText(getApplicationContext(), "Проверьте подключение к сети", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Проверьте подключение к сети", Toast.LENGTH_SHORT).show();
             }
         }
     }
